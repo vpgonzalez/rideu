@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
-  skip_before_action :verify_authenticity_token, raise: false
-
   def index
+    @trips = Trip.available.order(departure_time: :asc).limit(6)
   end
 end

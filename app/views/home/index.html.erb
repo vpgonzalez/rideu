@@ -39,56 +39,39 @@
 <div class="main-section">
   <div class="search-panel">
     <h3>Encuentra un Viaje</h3>
-    <select class="search-select"><option>Origen</option><option>Chicureo</option><option>La Florida</option></select>
-    <select class="search-select"><option>Destino</option><option>Campus PUC</option><option>UChile</option></select>
-    <select class="search-select"><option>Hora</option><option>7:00 AM</option><option>8:00 AM</option></select>
+    <input type="text" class="search-select" placeholder="🔍 Origen (ej: Chicureo)">
+    <input type="text" class="search-select" placeholder="🏫 Destino (ej: Campus PUC)">
+    <input type="time" class="search-select">
     <button class="btn-buscar">Buscar</button>
   </div>
 
   <div class="trips-panel">
     <h3>Oferta de Viajes</h3>
     <div class="trips-grid">
-      <div class="trip-card">
-        <div class="trip-header">
-          <div class="trip-avatar">DA</div>
-          <div>
-            <p class="trip-name">Daniela</p>
-            <p class="trip-route">Chicureo → Campus PUC</p>
+      <% if @trips&.any? %>
+        <% @trips.each do |trip| %>
+          <div class="trip-card">
+            <div class="trip-header">
+              <div class="trip-avatar">
+                <%= trip.user.email.first.upcase %>
+              </div>
+              <div>
+                <p class="trip-name"><%= trip.user.email.split("@").first.capitalize %></p>
+                <p class="trip-route"><%= trip.origin %> → <%= trip.destination %></p>
+              </div>
+            </div>
+            <div class="trip-footer">
+              <span class="trip-price">$ <%= number_with_delimiter(trip.price, delimiter: '.') %> <span class="trip-spots">· <%= trip.available_seats %> cupos</span></span>
+              <%= link_to "Solicitar", trip_path(trip), class: "btn-solicitar" %>
+            </div>
           </div>
+        <% end %>
+      <% else %>
+        <div style="grid-column: span 2; text-align:center; padding: 40px; color: #888;">
+          <p style="font-size:16px; margin-bottom:16px;">🚗 No hay viajes disponibles aún.</p>
+          <%= link_to "Publicar el primero", new_trip_path, class: "btn-solicitar" %>
         </div>
-        <div class="trip-footer">
-          <span class="trip-price">$ 2.000 <span class="trip-spots">· 2 cupos</span></span>
-          <button class="btn-solicitar">Solicitar</button>
-        </div>
-      </div>
-
-      <div class="trip-card">
-        <div class="trip-header">
-          <div class="trip-avatar" style="background:#e8f5e9;color:#2e7d32;">MA</div>
-          <div>
-            <p class="trip-name">Martín</p>
-            <p class="trip-route">Ñuñoa → UChile</p>
-          </div>
-        </div>
-        <div class="trip-footer">
-          <span class="trip-price">$ 2.000 <span class="trip-spots">· 1 cupo</span></span>
-          <button class="btn-solicitar">Solicitar</button>
-        </div>
-      </div>
-
-      <div class="trip-card">
-        <div class="trip-header">
-          <div class="trip-avatar" style="background:#fce4ec;color:#c62828;">SO</div>
-          <div>
-            <p class="trip-name">Sofía</p>
-            <p class="trip-route">La Florida → UdeC</p>
-          </div>
-        </div>
-        <div class="trip-footer">
-          <span class="trip-price">$ 2.000 <span class="trip-spots">· 3 cupos</span></span>
-          <button class="btn-solicitar">Solicitar</button>
-        </div>
-      </div>
+      <% end %>
     </div>
   </div>
 </div>

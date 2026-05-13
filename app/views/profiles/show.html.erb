@@ -1,0 +1,272 @@
+<nav class="navbar">
+  <div class="nav-logo">
+    <%= image_tag "logo.png", alt: "RideU" %>
+  </div>
+
+  <div class="nav-links">
+    <%= link_to "Buscar Viaje", trips_path, class: "nav-link" %>
+    <%= link_to "Publicar Ruta", new_trip_path, class: "nav-link" %>
+    <%= link_to "Mi Perfil", profile_path, class: "nav-link active" %>
+
+    <%= link_to "Cerrar sesión",
+    destroy_user_session_path,
+    data: { turbo_method: :delete },
+    class: "nav-btn" %>
+  </div>
+</nav>
+
+<div class="profile-page">
+
+  <!-- COLUMNA IZQUIERDA -->
+  <div class="profile-left">
+
+    <div class="profile-card">
+
+      <div class="profile-avatar-big">
+        <%= current_user.first_name&.first&.upcase || current_user.email.first.upcase %>
+      </div>
+
+      <h2 class="profile-name">
+        <%= current_user.full_name rescue current_user.email.split("@").first.capitalize %>
+      </h2>
+
+      <p class="profile-university">
+        🎓 <%= current_user.university %>
+      </p>
+
+      <p class="profile-role">
+        <%= current_user.driver? ? "🚗 Conductor" : "🎒 Pasajero" %>
+      </p>
+
+      <div class="profile-stars">
+        ⭐⭐⭐⭐⭐
+        <span class="profile-rating">5.0</span>
+      </div>
+
+      <div class="profile-badges">
+
+        <div class="badge <%= current_user.credential_verified? ? 'badge-ok' : 'badge-pending' %>">
+          <%= current_user.credential_verified? ? "✓" : "⏳" %>
+          Credencial universitaria
+        </div>
+
+        <% if current_user.driver? %>
+          <div class="badge <%= current_user.license_verified? ? 'badge-ok' : 'badge-pending' %>">
+            <%= current_user.license_verified? ? "✓" : "⏳" %>
+            Licencia de conducir
+          </div>
+        <% end %>
+
+      </div>
+
+      <div class="profile-stats-mini">
+
+        <div class="stat-mini">
+          <span class="stat-mini-value">
+            <%= @trips.count %>
+          </span>
+
+          <span class="stat-mini-label">
+            Viajes totales
+          </span>
+        </div>
+
+        <div class="stat-mini">
+          <span class="stat-mini-value">
+            <%= @trips.where(status: :active).count %>
+          </span>
+
+          <span class="stat-mini-label">
+            Activos
+          </span>
+        </div>
+
+        <div class="stat-mini">
+          <span class="stat-mini-value">
+            5.0
+          </span>
+
+          <span class="stat-mini-label">
+            Calificación
+          </span>
+        </div>
+
+      </div>
+
+      <%= link_to "✏️ Editar perfil",
+      edit_profile_path,
+      class: "btn-buscar",
+      style: "display:block; text-align:center; margin-top:16px; text-decoration:none;" %>
+
+    </div>
+
+  </div>
+
+  <!-- COLUMNA DERECHA -->
+  <div class="profile-right">
+
+    <!-- IZQUIERDA -->
+    <div class="profile-main-column">
+
+      <!-- VIAJES -->
+      <div class="profile-card">
+
+        <h3 class="profile-section-title">
+          📋 Viajes Disponibles
+        </h3>
+
+        <% active_trips = @trips.where(status: :active) %>
+
+        <% if active_trips.any? %>
+
+          <% active_trips.each do |trip| %>
+
+            <div class="profile-trip-item">
+
+              <div>
+                <p style="font-weight:600; color:#1a1a2e;">
+                  <%= trip.origin %> → <%= trip.destination %>
+                </p>
+
+                <p style="font-size:12px; color:#888;">
+                  🕐 <%= trip.departure_time.strftime("%d/%m/%Y %H:%M") %>
+                  · 💺 <%= trip.available_seats %> cupos
+                  · $ <%= number_with_delimiter(trip.price, delimiter: '.') %>
+                </p>
+              </div>
+
+              <%= link_to "Ver",
+              trip_path(trip),
+              class: "btn-solicitar" %>
+
+            </div>
+
+          <% end %>
+
+        <% else %>
+
+          <p style="color:#888; font-size:13px; padding:12px 0;">
+            No tienes viajes activos.
+          </p>
+
+        <% end %>
+
+      </div>
+
+      <!-- HISTORIAL -->
+      <div class="profile-card">
+
+        <h3 class="profile-section-title">
+          🕐 Historial de Viajes
+        </h3>
+
+        <% past_trips = @trips.where.not(status: :active) %>
+
+        <% if past_trips.any? %>
+
+          <% past_trips.each do |trip| %>
+
+            <div class="profile-trip-item">
+
+              <div>
+                <p style="font-weight:600; color:#1a1a2e;">
+                  <%= trip.origin %> → <%= trip.destination %>
+                </p>
+
+                <p style="font-size:12px; color:#888;">
+                  🕐 <%= trip.departure_time.strftime("%d/%m/%Y %H:%M") %>
+                </p>
+              </div>
+
+              <%= link_to "Ver",
+              trip_path(trip),
+              class: "btn-solicitar" %>
+
+            </div>
+
+          <% end %>
+
+        <% else %>
+
+          <p style="color:#888; font-size:13px; padding:12px 0;">
+            No tienes viajes en el historial aún.
+          </p>
+
+        <% end %>
+
+      </div>
+
+      <!-- REFERENCIAS -->
+      <div class="profile-card">
+
+        <h3 class="profile-section-title">
+          💬 Comentarios y Referencias
+        </h3>
+
+        <p style="color:#888; font-size:13px; padding:12px 0;">
+          Aún no tienes comentarios.
+          ¡Completa tus primeros viajes para recibir referencias!
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- DERECHA -->
+    <div class="profile-side-column">
+
+      <% if current_user.driver? %>
+
+        <div class="profile-card">
+
+          <h3 class="profile-section-title">
+            🚗 Mi Vehículo
+          </h3>
+
+          <% if @vehicle %>
+
+            <div class="vehicle-info">
+              <p><strong>Auto:</strong> <%= @vehicle.brand %> <%= @vehicle.model %></p>
+              <p><strong>Año:</strong> <%= @vehicle.year %></p>
+              <p><strong>Patente:</strong> <%= @vehicle.plate %></p>
+              <p><strong>Color:</strong> <%= @vehicle.color %></p>
+              <p><strong>Asientos:</strong> <%= @vehicle.seats %></p>
+            </div>
+
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+
+              <%= link_to "✏️ Editar vehículo",
+              new_vehicle_path,
+              class: "btn-outline-blue",
+              style: "text-align:center;" %>
+
+              <%= link_to "＋ Agregar vehículo",
+              new_vehicle_path,
+              class: "btn-auth",
+              style: "text-align:center; margin-top:0;" %>
+
+            </div>
+
+          <% else %>
+
+            <div class="vehicle-empty">
+
+              <p>No has registrado tu vehículo aún.</p>
+
+              <%= link_to "＋ Registrar vehículo",
+              new_vehicle_path,
+              class: "btn-auth" %>
+
+            </div>
+
+          <% end %>
+
+        </div>
+
+      <% end %>
+
+    </div>
+
+  </div>
+
+</div>

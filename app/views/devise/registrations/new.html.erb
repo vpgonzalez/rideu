@@ -15,6 +15,17 @@
         </div>
       <% end %>
 
+      <div class="form-row">
+        <div class="form-group">
+          <%= f.label :first_name, "Nombre" %>
+          <%= f.text_field :first_name, placeholder: "Tu nombre", class: "form-input" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :last_name, "Apellido" %>
+          <%= f.text_field :last_name, placeholder: "Tu apellido", class: "form-input" %>
+        </div>
+      </div>
+
       <div class="form-group">
         <%= f.label :email, "Correo institucional" %>
         <%= f.email_field :email, placeholder: "tucorreo@universidad.cl", class: "form-input" %>

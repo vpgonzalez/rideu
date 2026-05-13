@@ -1,11 +1,16 @@
 class TripsController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_driver, only: [:new, :create]
 
   def index
     @trips = Trip.available.order(departure_time: :asc)
   end
 
   def new
+    if current_user.vehicle.nil?
+      redirect_to new_vehicle_path, alert: "Primero debes registrar tu vehículo para publicar rutas."
+      return
+    end
     @trip = Trip.new
   end
 
@@ -27,6 +32,12 @@ class TripsController < ApplicationController
   end
 
   private
+
+  def require_driver
+    unless current_user.driver?
+      redirect_to root_path, alert: "Solo los conductores pueden publicar rutas."
+    end
+  end
 
   def trip_params
     params.require(:trip).permit(
