@@ -3,10 +3,12 @@
     <div class="nav-logo">
       <%= image_tag "logo.png", alt: "RideU", height: 32 %>
     </div>
+
     <div class="nav-links">
       <%= link_to "Buscar Viaje", trips_path, class: "nav-link active" %>
       <%= link_to "Publicar Ruta", new_trip_path, class: "nav-link" %>
-      <%= link_to "Mi Perfil", "#", class: "nav-link" %>
+      <%= link_to "Mi Perfil", profile_path, class: "nav-link" %>
+
       <% if user_signed_in? %>
         <%= link_to "Cerrar sesión", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-btn" %>
       <% else %>
@@ -19,11 +21,13 @@
     <div class="hero-text">
       <h1>Conecta tu camino<br><span>con otros estudiantes</span></h1>
       <p><strong>Comparte tus viajes</strong> y llega a la universidad de forma fácil y segura.</p>
+
       <div class="hero-btns">
         <%= link_to "Buscar Viaje", trips_path, class: "btn-primary" %>
         <%= link_to "Publicar Ruta", new_trip_path, class: "btn-outline" %>
       </div>
     </div>
+
     <div class="hero-illustration">
       <%= image_tag "hero.png", alt: "RideU ilustración" %>
     </div>
@@ -47,6 +51,7 @@
 
   <div class="trips-panel">
     <h3>Oferta de Viajes</h3>
+
     <div class="trips-grid">
       <% if @trips&.any? %>
         <% @trips.each do |trip| %>
@@ -55,14 +60,28 @@
               <div class="trip-avatar">
                 <%= trip.user.email.first.upcase %>
               </div>
+
               <div>
-                <p class="trip-name"><%= trip.user.email.split("@").first.capitalize %></p>
-                <p class="trip-route"><%= trip.origin %> → <%= trip.destination %></p>
+                <p class="trip-name">
+                  <%= trip.user.email.split("@").first.capitalize %>
+                </p>
+                <p class="trip-route">
+                  <%= trip.origin %> → <%= trip.destination %>
+                </p>
               </div>
             </div>
+
             <div class="trip-footer">
-              <span class="trip-price">$ <%= number_with_delimiter(trip.price, delimiter: '.') %> <span class="trip-spots">· <%= trip.available_seats %> cupos</span></span>
-              <%= link_to "Solicitar", trip_path(trip), class: "btn-solicitar" %>
+              <span class="trip-price">
+                $ <%= number_with_delimiter(trip.price, delimiter: ".") %>
+                <span class="trip-spots">· <%= trip.available_seats %> cupos</span>
+              </span>
+
+              <% if trip.available_seats > 0 %>
+                <%= link_to "Ver viaje", trip_path(trip), class: "btn-solicitar" %>
+              <% else %>
+                <span class="full-badge">LLENO</span>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -81,10 +100,12 @@
     <p class="stat-label">✓ Viajes Completados</p>
     <p class="stat-value">12.500 +</p>
   </div>
+
   <div class="stat-item">
     <p class="stat-label">🌿 CO₂ Ahorrado</p>
     <p class="stat-value">8.2 Ton</p>
   </div>
+
   <div class="stat-item">
     <p class="stat-label">🐷 Promedio Ahorrado</p>
     <p class="stat-value">$ 38.000 CLP</p>

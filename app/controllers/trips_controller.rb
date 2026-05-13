@@ -1,6 +1,6 @@
 class TripsController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_driver, only: [:new, :create]
+  before_action :require_driver, only: [:new, :create, :destroy]
 
   def index
     @trips = Trip.available.order(departure_time: :asc)
@@ -11,12 +11,12 @@ class TripsController < ApplicationController
       redirect_to new_vehicle_path, alert: "Primero debes registrar tu vehículo para publicar rutas."
       return
     end
-    @trip = Trip.new
+
+    @trip = current_user.trips.build
   end
 
   def create
-    @trip = Trip.new(trip_params)
-    @trip.user = current_user
+    @trip = current_user.trips.build(trip_params)
     @trip.status = :active
     @trip.university = @trip.destination
 
@@ -31,6 +31,13 @@ class TripsController < ApplicationController
     @trip = Trip.find(params[:id])
   end
 
+  def destroy
+    @trip = current_user.trips.find(params[:id])
+    @trip.destroy
+
+    redirect_to profile_path, notice: "Viaje eliminado correctamente."
+  end
+
   private
 
   def require_driver
@@ -41,8 +48,12 @@ class TripsController < ApplicationController
 
   def trip_params
     params.require(:trip).permit(
-      :origin, :destination, :departure_time,
-      :price, :available_seats, :university
+      :origin,
+      :destination,
+      :departure_time,
+      :price,
+      :available_seats,
+      :university
     )
   end
 end

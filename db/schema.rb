@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_13_200233) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_13_205221) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "reservations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "status"
+    t.bigint "trip_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["trip_id"], name: "index_reservations_on_trip_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
 
   create_table "trips", force: :cascade do |t|
     t.integer "available_seats"
@@ -62,6 +72,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_200233) do
     t.index ["user_id"], name: "index_vehicles_on_user_id"
   end
 
+  add_foreign_key "reservations", "trips"
+  add_foreign_key "reservations", "users"
   add_foreign_key "trips", "users"
   add_foreign_key "vehicles", "users"
 end

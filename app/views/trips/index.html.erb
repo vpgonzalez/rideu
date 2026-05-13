@@ -4,10 +4,12 @@
       <div class="nav-logo">
         <%= image_tag "logo.png", alt: "RideU" %>
       </div>
+
       <div class="nav-links">
         <%= link_to "Buscar Viaje", trips_path, class: "nav-link active" %>
         <%= link_to "Publicar Ruta", new_trip_path, class: "nav-link" %>
-        <%= link_to "Mi Perfil", "#", class: "nav-link" %>
+        <%= link_to "Mi Perfil", profile_path, class: "nav-link" %>
+
         <% if user_signed_in? %>
           <%= link_to "Cerrar sesión", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-btn" %>
         <% else %>
@@ -45,18 +47,47 @@
                 <div class="trip-avatar">
                   <%= trip.user.email.first.upcase %>
                 </div>
+
                 <div>
-                  <p class="trip-name"><%= trip.user.email.split("@").first.capitalize %></p>
+                  <p class="trip-name">
+                    <%= trip.user.respond_to?(:full_name) ? trip.user.full_name : trip.user.email.split("@").first.capitalize %>
+                  </p>
                   <p class="trip-route"><%= trip.origin %> → <%= trip.destination %></p>
                 </div>
               </div>
+
               <div class="trip-info-row">
                 <span>🕐 <%= trip.departure_time.strftime("%H:%M") %></span>
-                <span>💺 <%= trip.available_seats %> cupos</span>
+
+                <% if trip.available_seats > 0 %>
+                  <span>💺 <%= trip.available_seats %> cupos</span>
+                <% else %>
+                  <span class="full-badge">LLENO</span>
+                <% end %>
               </div>
+
               <div class="trip-footer">
-                <span class="trip-price">$ <%= number_with_delimiter(trip.price, delimiter: '.') %> <span class="trip-spots">· <%= trip.available_seats %> cupos</span></span>
-                <%= link_to "Ver viaje", trip_path(trip), class: "btn-solicitar" %>
+                <span class="trip-price">
+                  $ <%= number_with_delimiter(trip.price, delimiter: ".") %>
+                  <span class="trip-spots">· <%= trip.available_seats %> cupos</span>
+                </span>
+
+                <div class="trip-actions">
+                  <%= link_to "Ver viaje", trip_path(trip), class: "btn-solicitar" %>
+
+                  <% if user_signed_in? && current_user != trip.user && trip.available_seats > 0 %>
+                    <%= button_to "Reservar",
+                        trip_reservations_path(trip),
+                        method: :post,
+                        class: "btn-solicitar" %>
+                  <% elsif user_signed_in? && current_user == trip.user %>
+                    <span class="own-trip-label">Tu viaje</span>
+                  <% elsif trip.available_seats <= 0 %>
+                    <span class="full-badge">LLENO</span>
+                  <% else %>
+                    <%= link_to "Ingresar para reservar", new_user_session_path, class: "btn-solicitar" %>
+                  <% end %>
+                </div>
               </div>
             </div>
           <% end %>

@@ -4,7 +4,13 @@ class ProfilesController < ApplicationController
   def show
     @user = current_user
     @vehicle = current_user.vehicle
-    @trips = current_user.trips.order(departure_time: :desc)
+
+    if current_user.driver?
+      @trips = current_user.trips.order(departure_time: :desc)
+    else
+      @reservations = current_user.reservations.includes(:trip).order(created_at: :desc)
+      @reserved_trips = @reservations.map(&:trip)
+    end
   end
 
   def edit
@@ -14,6 +20,7 @@ class ProfilesController < ApplicationController
 
   def update
     @user = current_user
+
     if @user.update(user_params)
       redirect_to profile_path, notice: "Perfil actualizado correctamente"
     else

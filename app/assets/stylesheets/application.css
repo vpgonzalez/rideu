@@ -734,3 +734,46 @@
   color: #888;
   font-size: 13px;
 }
+
+.btn-delete-trip {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-delete-trip:hover {
+  background: #e53935;
+}
+
+.owner-trip-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #eef7ff;
+  border: 1px solid #b9dcff;
+  color: #0b4f8a;
+  padding: 14px 16px;
+  border-radius: 14px;
+  flex: 1;
+}
+
+.owner-trip-icon {
+  font-size: 24px;
+}
+
+.owner-trip-title {
+  margin: 0;
+  font-weight: 700;
+  color: #073b6f;
+}
+
+.owner-trip-text {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #42677f;
+}

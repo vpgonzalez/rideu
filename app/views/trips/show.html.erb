@@ -6,7 +6,12 @@
         <div class="route-arrow">↓</div>
         <h2>🏫 <%= @trip.destination %></h2>
       </div>
-      <span class="trip-status-badge">Disponible</span>
+
+      <% if @trip.available_seats > 0 %>
+        <span class="trip-status-badge">Disponible</span>
+      <% else %>
+        <span class="full-badge">LLENO</span>
+      <% end %>
     </div>
 
     <div class="trip-show-info">
@@ -14,14 +19,17 @@
         <span class="info-label">🕐 Salida</span>
         <span class="info-value"><%= @trip.departure_time.strftime("%d/%m/%Y a las %H:%M") %></span>
       </div>
+
       <div class="trip-info-item">
         <span class="info-label">💰 Precio</span>
-        <span class="info-value">$ <%= number_with_delimiter(@trip.price, delimiter: '.') %> CLP</span>
+        <span class="info-value">$ <%= number_with_delimiter(@trip.price, delimiter: ".") %> CLP</span>
       </div>
+
       <div class="trip-info-item">
         <span class="info-label">💺 Cupos</span>
         <span class="info-value"><%= @trip.available_seats %> disponibles</span>
       </div>
+
       <div class="trip-info-item">
         <span class="info-label">🎓 Universidad</span>
         <span class="info-value"><%= @trip.university %></span>
@@ -32,6 +40,7 @@
       <div class="trip-avatar" style="width:50px;height:50px;font-size:16px;">
         <%= @trip.user.email.first.upcase %>
       </div>
+
       <div>
         <p class="trip-name">Conductor verificado</p>
         <p class="trip-route"><%= @trip.user.email %></p>
@@ -39,7 +48,30 @@
     </div>
 
     <div class="trip-show-actions">
-      <button class="btn-auth">Solicitar cupo</button>
+      <% if @trip.available_seats <= 0 %>
+        <span class="full-badge">Viaje lleno</span>
+
+      <% elsif user_signed_in? && current_user == @trip.user %>
+        <div>
+          <span class="owner-trip-icon">🚗</span>
+          <div>
+            <p class="owner-trip-title">Este viaje fue publicado por ti</p>
+            <p class="owner-trip-text">Puedes revisarlo desde tu perfil o eliminarlo si ya no estará disponible.</p>
+          </div>
+        </div>
+
+      <% elsif user_signed_in? %>
+        <%= button_to "Reservar cupo",
+            trip_reservations_path(@trip),
+            method: :post,
+            class: "btn-auth" %>
+
+      <% else %>
+        <%= link_to "Ingresar para reservar",
+            new_user_session_path,
+            class: "btn-auth" %>
+      <% end %>
+
       <%= link_to "← Volver", root_path, class: "btn-outline-blue" %>
     </div>
   </div>
