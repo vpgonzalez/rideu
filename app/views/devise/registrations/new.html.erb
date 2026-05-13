@@ -1,0 +1,55 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span>📍</span> RideU
+    </div>
+    <h2>Crear cuenta</h2>
+    <p class="auth-subtitle">Solo estudiantes universitarios verificados</p>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <% if resource.errors.any? %>
+        <div class="auth-errors">
+          <% resource.errors.full_messages.each do |msg| %>
+            <p>⚠️ <%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :email, "Correo institucional" %>
+        <%= f.email_field :email, placeholder: "tucorreo@universidad.cl", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :university, "Universidad" %>
+        <%= f.select :university, ["Universidad de Chile", "PUC", "Universidad de los Andes", "UAI", "USACH", "UDP", "UDD", "Otra"], { prompt: "Selecciona tu universidad" }, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :phone, "Teléfono" %>
+        <%= f.text_field :phone, placeholder: "+56 9 1234 5678", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :role, "¿Cómo quieres usar RideU?" %>
+        <%= f.select :role, [["🎒 Soy pasajero", "passenger"], ["🚗 Soy conductor", "driver"]], { prompt: "Selecciona tu rol" }, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Contraseña" %>
+        <%= f.password_field :password, placeholder: "Mínimo 6 caracteres", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirmar contraseña" %>
+        <%= f.password_field :password_confirmation, placeholder: "Repite tu contraseña", class: "form-input" %>
+      </div>
+
+      <%= f.submit "Crear cuenta", class: "btn-auth" %>
+    <% end %>
+
+    <p class="auth-footer">
+      ¿Ya tienes cuenta? <%= link_to "Ingresar", new_user_session_path %>
+    </p>
+  </div>
+</div>

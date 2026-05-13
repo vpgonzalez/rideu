@@ -1,0 +1,52 @@
+<div class="auth-container">
+  <div class="auth-card" style="max-width: 560px;">
+    <div class="auth-logo">
+      <span>📍</span> RideU
+    </div>
+    <h2>Publicar Ruta</h2>
+    <p class="auth-subtitle">Completa los datos de tu viaje</p>
+
+    <%= form_with model: @trip, local: true do |f| %>
+      <% if @trip.errors.any? %>
+        <div class="auth-errors">
+          <% @trip.errors.full_messages.each do |msg| %>
+            <p>⚠️ <%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :origin, "Origen" %>
+        <%= f.text_field :origin, placeholder: "Ej: Chicureo, Las Condes", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :destination, "Destino" %>
+        <%= f.text_field :destination, placeholder: "Ej: Campus PUC", class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :departure_time, "Fecha y hora de salida" %>
+        <%= f.datetime_local_field :departure_time, class: "form-input" %>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <%= f.label :price, "Precio por pasajero ($)" %>
+          <%= f.text_field :price, placeholder: "2000", class: "form-input" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :available_seats, "Cupos disponibles" %>
+          <%= f.text_field :available_seats, placeholder: "3", class: "form-input" %>
+        </div>
+      </div>
+
+      <%= f.submit "Publicar viaje", class: "btn-auth" %>
+    <% end %>
+
+    <p class="auth-footer">
+      <%= link_to "← Volver al inicio", root_path %>
+    </p>
+  </div>
+</div>

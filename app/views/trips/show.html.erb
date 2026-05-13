@@ -1,0 +1,46 @@
+<div class="trip-show-container">
+  <div class="trip-show-card">
+    <div class="trip-show-header">
+      <div class="trip-show-route">
+        <h2>📍 <%= @trip.origin %></h2>
+        <div class="route-arrow">↓</div>
+        <h2>🏫 <%= @trip.destination %></h2>
+      </div>
+      <span class="trip-status-badge">Disponible</span>
+    </div>
+
+    <div class="trip-show-info">
+      <div class="trip-info-item">
+        <span class="info-label">🕐 Salida</span>
+        <span class="info-value"><%= @trip.departure_time.strftime("%d/%m/%Y a las %H:%M") %></span>
+      </div>
+      <div class="trip-info-item">
+        <span class="info-label">💰 Precio</span>
+        <span class="info-value">$ <%= number_with_delimiter(@trip.price, delimiter: '.') %> CLP</span>
+      </div>
+      <div class="trip-info-item">
+        <span class="info-label">💺 Cupos</span>
+        <span class="info-value"><%= @trip.available_seats %> disponibles</span>
+      </div>
+      <div class="trip-info-item">
+        <span class="info-label">🎓 Universidad</span>
+        <span class="info-value"><%= @trip.university %></span>
+      </div>
+    </div>
+
+    <div class="trip-show-driver">
+      <div class="trip-avatar" style="width:50px;height:50px;font-size:16px;">
+        <%= @trip.user.email.first.upcase %>
+      </div>
+      <div>
+        <p class="trip-name">Conductor verificado</p>
+        <p class="trip-route"><%= @trip.user.email %></p>
+      </div>
+    </div>
+
+    <div class="trip-show-actions">
+      <button class="btn-auth">Solicitar cupo</button>
+      <%= link_to "← Volver", root_path, class: "btn-outline-blue" %>
+    </div>
+  </div>
+</div>

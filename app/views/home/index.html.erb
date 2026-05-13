@@ -1,0 +1,109 @@
+<div class="hero-section">
+  <nav class="navbar">
+    <div class="nav-logo">
+      <%= image_tag "logo.png", alt: "RideU", height: 32 %>
+    </div>
+    <div class="nav-links">
+      <%= link_to "Buscar Viaje", trips_path, class: "nav-link active" %>
+      <%= link_to "Publicar Ruta", new_trip_path, class: "nav-link" %>
+      <%= link_to "Mi Perfil", "#", class: "nav-link" %>
+      <% if user_signed_in? %>
+        <%= link_to "Cerrar sesión", destroy_user_session_path, data: { turbo_method: :delete }, class: "nav-btn" %>
+      <% else %>
+        <%= link_to "Ingresar", new_user_session_path, class: "nav-btn" %>
+      <% end %>
+    </div>
+  </nav>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Conecta tu camino<br><span>con otros estudiantes</span></h1>
+      <p><strong>Comparte tus viajes</strong> y llega a la universidad de forma fácil y segura.</p>
+      <div class="hero-btns">
+        <%= link_to "Buscar Viaje", trips_path, class: "btn-primary" %>
+        <%= link_to "Publicar Ruta", new_trip_path, class: "btn-outline" %>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <%= image_tag "hero.png", alt: "RideU ilustración" %>
+    </div>
+  </div>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,20 C360,60 1080,60 1440,20 L1440,60 L0,60 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+</div>
+
+<div class="main-section">
+  <div class="search-panel">
+    <h3>Encuentra un Viaje</h3>
+    <select class="search-select"><option>Origen</option><option>Chicureo</option><option>La Florida</option></select>
+    <select class="search-select"><option>Destino</option><option>Campus PUC</option><option>UChile</option></select>
+    <select class="search-select"><option>Hora</option><option>7:00 AM</option><option>8:00 AM</option></select>
+    <button class="btn-buscar">Buscar</button>
+  </div>
+
+  <div class="trips-panel">
+    <h3>Oferta de Viajes</h3>
+    <div class="trips-grid">
+      <div class="trip-card">
+        <div class="trip-header">
+          <div class="trip-avatar">DA</div>
+          <div>
+            <p class="trip-name">Daniela</p>
+            <p class="trip-route">Chicureo → Campus PUC</p>
+          </div>
+        </div>
+        <div class="trip-footer">
+          <span class="trip-price">$ 2.000 <span class="trip-spots">· 2 cupos</span></span>
+          <button class="btn-solicitar">Solicitar</button>
+        </div>
+      </div>
+
+      <div class="trip-card">
+        <div class="trip-header">
+          <div class="trip-avatar" style="background:#e8f5e9;color:#2e7d32;">MA</div>
+          <div>
+            <p class="trip-name">Martín</p>
+            <p class="trip-route">Ñuñoa → UChile</p>
+          </div>
+        </div>
+        <div class="trip-footer">
+          <span class="trip-price">$ 2.000 <span class="trip-spots">· 1 cupo</span></span>
+          <button class="btn-solicitar">Solicitar</button>
+        </div>
+      </div>
+
+      <div class="trip-card">
+        <div class="trip-header">
+          <div class="trip-avatar" style="background:#fce4ec;color:#c62828;">SO</div>
+          <div>
+            <p class="trip-name">Sofía</p>
+            <p class="trip-route">La Florida → UdeC</p>
+          </div>
+        </div>
+        <div class="trip-footer">
+          <span class="trip-price">$ 2.000 <span class="trip-spots">· 3 cupos</span></span>
+          <button class="btn-solicitar">Solicitar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <p class="stat-label">✓ Viajes Completados</p>
+    <p class="stat-value">12.500 +</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-label">🌿 CO₂ Ahorrado</p>
+    <p class="stat-value">8.2 Ton</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-label">🐷 Promedio Ahorrado</p>
+    <p class="stat-value">$ 38.000 CLP</p>
+  </div>
+</div>
